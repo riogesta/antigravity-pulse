@@ -75,7 +75,7 @@ interface ServerResponse {
             name: string;
             availableCredits?: {
                 creditType: string;
-                creditAmount: string;
+                creditAmount?: string;
                 minimumCreditAmountForUsage: string;
             }[];
         };
@@ -293,7 +293,7 @@ function parseResponse(data: ServerResponse): QuotaSnapshot {
     // ── AI Credits (Google One, etc.) ──
     const aiCredits: AICredit[] = (userStatus.userTier?.availableCredits || []).map(c => ({
         creditType: c.creditType,
-        creditAmount: Number(c.creditAmount),
+        creditAmount: Number(c.creditAmount ?? 0), // omitted by the API when 0
         minimumForUsage: Number(c.minimumCreditAmountForUsage),
     }));
 
